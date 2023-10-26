@@ -15,17 +15,55 @@ class MainApp extends StatelessWidget {
       locale: const Locale('pt', 'BR'),
       themeMode: ThemeMode.system,
       theme: ThemeData(
-        useMaterial3: true,
+        useMaterial3: false,
         brightness: Brightness.light,
-        dividerTheme: const DividerThemeData(
-          space: 20.0,
+        dividerTheme: const DividerThemeData(space: 20.0),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.lightGreen,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.lightGreen,
+            padding: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+          ),
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Colors.lightGreen,
+        ),
+        dialogTheme: const DialogTheme(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
         ),
       ),
       darkTheme: ThemeData(
-        useMaterial3: true,
+        useMaterial3: false,
         brightness: Brightness.dark,
-        dividerTheme: const DividerThemeData(
-          space: 20.0,
+        dividerTheme: const DividerThemeData(space: 20.0),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.lightGreen,
+            padding: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+          ),
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Colors.lightGreen,
+          
+        ),
+        dialogTheme: const DialogTheme(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
         ),
       ),
     );

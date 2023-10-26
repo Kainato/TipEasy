@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tip_easy/widgets/InputTextFormField.dart';
 import 'package:tip_easy/fixes_variables/paddings.dart';
+import 'package:tip_easy/widgets/InsertDialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,8 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController conta = TextEditingController();
-  TextEditingController gorgeta = TextEditingController();
+  TextEditingController price = TextEditingController();
+  TextEditingController tip = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,19 +29,19 @@ class _HomePageState extends State<HomePage> {
           mainAxisSize: MainAxisSize.max,
           children: [
             InputTextFormField(
-              controller: conta,
-              labelText: 'Valor da conta',
-              hintText: 'Insira o valor da conta',
-              prefixText: 'R\$  ',
+              controller: price,
+              labelText: 'Price value',
+              hintText: 'Insert the price value',
+              prefixText: '\$  ',
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],
             ),
             const Divider(color: Colors.transparent),
             InputTextFormField(
-              controller: gorgeta,
-              labelText: 'Porcentagem da gorjeta',
-              hintText: 'Insira o valor da gorjeta',
+              controller: tip,
+              labelText: 'Tip percentage',
+              hintText: 'Insert the tip percentage',
               prefixText: '%  ',
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -48,44 +49,51 @@ class _HomePageState extends State<HomePage> {
             ),
             const Divider(color: Colors.transparent),
             ElevatedButton(
-              child: const Text('Calcular montante'),
-              onPressed: () => calcularMontante(),
+              child: const Text('Calculate'),
+              onPressed: () => calculate(),
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.refresh),
+        onPressed: () => setState(() {
+          price.clear();
+          tip.clear();
+        }),
+      ),
     );
   }
 
-  calcularMontante() {
-    double valueConta = double.parse(conta.text);
-    double porcentagem = double.parse(gorgeta.text) / 100;
-    double montante = valueConta + (valueConta * porcentagem);
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Valor da conta'),
-          icon: const Icon(Icons.monetization_on),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('O valor da conta ficou um total de R\$ $montante'),
-              const Divider(),
-              Text(
-                  'O valor da gorgeta foi de R\$ ${(valueConta * porcentagem)}'),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Ok'),
-            ),
+  calculate() {
+    if (price.text.isEmpty || tip.text.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => const InsertDialog(
+          title: 'Error',
+          icon: Icons.error,
+          content: [
+            Text('Please, fill all the fields'),
           ],
-        );
-      },
-    );
+        ),
+      );
+    } else {
+      double value = double.parse(price.text);
+      double percent = double.parse(tip.text) / 100;
+      double amount = value + (value * percent);
+
+      showDialog(
+        context: context,
+        builder: (context) => InsertDialog(
+          title: 'Bill amont',
+          icon: Icons.monetization_on,
+          content: [
+            Text('The bill amount is a total of \$ $amount'), // EN:
+            const Divider(),
+            Text('The tip percentage was R\$ ${(value * percent)}'), // EN:
+          ],
+        ),
+      );
+    }
   }
 }
