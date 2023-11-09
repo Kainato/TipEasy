@@ -17,3 +17,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    # - lang/
+    - lib/assets/
+    - lib/assets/TipEasy.png
+    - lib/assets/TipEasyDark.png

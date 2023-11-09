@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:tip_easy/widgets/InputTextFormField.dart';
 import 'package:tip_easy/fixes_variables/paddings.dart';
@@ -14,11 +15,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController price = TextEditingController();
   TextEditingController tip = TextEditingController();
+  var brightness =
+      SchedulerBinding.instance.platformDispatcher.platformBrightness;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tip Easy'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => setState(() {
+              price.clear();
+              tip.clear();
+            }),
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -28,10 +41,17 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
+            Image.asset(
+              Theme.of(context).brightness == Brightness.dark
+                  ? 'lib/assets/TipEasyDark.png'
+                  : 'lib/assets/TipEasy.png',
+              width: MediaQuery.of(context).size.height * 0.3,
+            ),
+            const Divider(color: Colors.transparent),
             InputTextFormField(
               controller: price,
               labelText: 'Price value',
-              hintText: 'Insert the price value',
+              hintText: 'Insert the price value in',
               prefixText: '\$  ',
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -49,18 +69,14 @@ class _HomePageState extends State<HomePage> {
             ),
             const Divider(color: Colors.transparent),
             ElevatedButton(
-              child: const Text('Calculate'),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Calculate'),
+              ),
               onPressed: () => calculate(),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.refresh),
-        onPressed: () => setState(() {
-          price.clear();
-          tip.clear();
-        }),
       ),
     );
   }
@@ -88,7 +104,13 @@ class _HomePageState extends State<HomePage> {
           title: 'Bill amont',
           icon: Icons.monetization_on,
           content: [
-            Text('The bill amount is a total of \$ $amount'), // EN:
+            Text(
+              'The bill amount is a total of \$ $amount',
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize,
+                fontWeight: FontWeight.bold,
+              ),
+            ), // EN:
             const Divider(),
             Text('The tip percentage was R\$ ${(value * percent)}'), // EN:
           ],
