@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:tip_easy/themes.dart';
+import 'package:tip_easy/widgets/ChangeThemeButton.dart';
 import 'package:tip_easy/widgets/InputTextFormField.dart';
-import 'package:tip_easy/fixes_variables/paddings.dart';
 import 'package:tip_easy/widgets/InsertDialog.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,26 +26,28 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Tip Easy'),
         actions: [
           IconButton(
+            tooltip: 'Clear the fields',
             icon: const Icon(Icons.refresh),
             onPressed: () => setState(() {
               price.clear();
               tip.clear();
             }),
           ),
+          const ChangeThemeButton(),
         ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: TypePadding().w20(context),
+          horizontal: PaddingScreen().pad20(context),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
             Image.asset(
-              Theme.of(context).brightness == Brightness.dark
-                  ? 'lib/assets/TipEasyDark.png'
-                  : 'lib/assets/TipEasy.png',
+              ThemeProvider().widgetTheme(context,
+                  darkTheme: 'lib/assets/TipEasyDark.png',
+                  lightTheme: 'lib/assets/TipEasy.png'),
               width: MediaQuery.of(context).size.height * 0.3,
             ),
             const Divider(color: Colors.transparent),
