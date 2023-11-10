@@ -26,7 +26,12 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Tip Easy'),
         actions: [
           IconButton(
-            tooltip: 'Clear the fields',
+            tooltip: 'Como utilizar',
+            icon: const Icon(Icons.help_outline),
+            onPressed: () => showTip(),
+          ),
+          IconButton(
+            tooltip: 'Limpar todos os campos',
             icon: const Icon(Icons.refresh),
             onPressed: () => setState(() {
               price.clear();
@@ -53,28 +58,29 @@ class _HomePageState extends State<HomePage> {
             const Divider(color: Colors.transparent),
             InputTextFormField(
               controller: price,
-              labelText: 'Price value',
-              hintText: 'Insert the price value in',
+              labelText: 'Preço da conta',
+              hintText: 'Insira o preço da conta',
               prefixText: '\$  ',
               inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
               ],
             ),
             const Divider(color: Colors.transparent),
             InputTextFormField(
               controller: tip,
-              labelText: 'Tip percentage',
-              hintText: 'Insert the tip percentage',
+              labelText: 'Porcentagem da gorjeta',
+              hintText: 'Insira a porcentagem da gorjeta',
               prefixText: '%  ',
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(3),
               ],
             ),
             const Divider(color: Colors.transparent),
             ElevatedButton(
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Text('Calculate'),
+                child: Text('Calcular resultado'),
               ),
               onPressed: () => calculate(),
             ),
@@ -89,10 +95,11 @@ class _HomePageState extends State<HomePage> {
       showDialog(
         context: context,
         builder: (context) => const InsertDialog(
-          title: 'Error',
+          title: 'Ops...',
           icon: Icons.error,
           content: [
-            Text('Please, fill all the fields'),
+            Text(
+                'Você deve preencher todos os campos para calcular o resultado!'),
           ],
         ),
       );
@@ -104,21 +111,52 @@ class _HomePageState extends State<HomePage> {
       showDialog(
         context: context,
         builder: (context) => InsertDialog(
-          title: 'Bill amont',
+          title: 'Resultado',
           icon: Icons.monetization_on,
           content: [
             Text(
-              'The bill amount is a total of \$ $amount',
+              'O valor total da conta é $amount\$',
               style: TextStyle(
                 fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize,
                 fontWeight: FontWeight.bold,
               ),
-            ), // EN:
+            ),
             const Divider(),
-            Text('The tip percentage was R\$ ${(value * percent)}'), // EN:
+            Text('O valor da gorjeta foi de ${value * percent}\$'),
           ],
         ),
       );
     }
+  }
+
+  showTip() {
+    showDialog(
+      context: context,
+      builder: (context) => const InsertDialog(
+        title: 'Como utilizar o Tip Easy',
+        icon: Icons.monetization_on,
+        content: [
+          Text(
+            '1. Insira o valor da conta no campo "Preço da conta".',
+            style: TextThemeData.headlineMedium,
+          ),
+          Divider(color: Colors.transparent),
+          Text(
+            '2. Insira a porcentagem da gorjeta no campo "Porcentagem da gorjeta".',
+            style: TextThemeData.headlineMedium,
+          ),
+          Divider(color: Colors.transparent),
+          Text(
+            '3. Clique no botão "Calcular resultado".',
+            style: TextThemeData.headlineMedium,
+          ),
+          Divider(color: Colors.transparent),
+          Text(
+            '4. Veja o resultado!',
+            style: TextThemeData.headlineMedium,
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -8,7 +8,7 @@ class ChangeThemeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      tooltip: 'Change theme mode',
+      tooltip: 'Alterar tema',
       icon: Theme.of(context).brightness == Brightness.light
           ? const Icon(Icons.brightness_7)
           : const Icon(Icons.brightness_3),

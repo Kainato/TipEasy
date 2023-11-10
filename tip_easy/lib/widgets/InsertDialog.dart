@@ -17,6 +17,9 @@ class InsertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       title: Text(title),
       icon: Icon(icon),
       content: Column(
@@ -27,10 +30,7 @@ class InsertDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text(
-            'Close',
-            style: TextStyle(),
-          ),
+          child: const Text('Fechar'),
         ),
         ...actions ?? [],
       ],
